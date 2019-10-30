@@ -4,8 +4,45 @@ angular.module("hyGui").factory("hyTemplate", [
 
     ) {
 
-        var Template = {
+        var 
+        
+        ng = angular, 
+        
+        Template = {
+            
+            /**
+             * 
+             */
+            $parent: null,
 
+            /**
+             * 
+             */
+            $template: "{%block base%}{%end base%}",
+
+            extends: function extends ($template)
+            {
+                this.$parent = Object.create($template);
+                return this;
+            },
+
+            setTemplate: function ($template)
+            {
+                if (ng.isArray($template))
+                {
+
+                }
+            },
+
+            getTemplate: function getTemplate ()
+            {
+                return this.$template;
+            },
+
+            compile: function compile ()
+            {
+                
+            }
         };
 
         return Template;

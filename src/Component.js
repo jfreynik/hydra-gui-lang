@@ -18,6 +18,7 @@ angular.module("hyGui").factory("Component", [
                 {
                     var parent = Object.create($object);
                     this.setParent(parent);
+                    return this;
                 },
 
                 getTemplate: function getTemplate ()
