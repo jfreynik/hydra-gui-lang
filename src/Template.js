@@ -1,3 +1,4 @@
+/* global angular */
 angular.module("hyGui").factory("hyTemplate", [
 
     function TemplateFactory (
@@ -18,7 +19,7 @@ angular.module("hyGui").factory("hyTemplate", [
             /**
              * 
              */
-            $template: "{%block base%}{%end base%}",
+            $template: "{(block base)}{(end base)}",
 
             extends: function extends ($template)
             {
@@ -30,8 +31,9 @@ angular.module("hyGui").factory("hyTemplate", [
             {
                 if (ng.isArray($template))
                 {
-
+                    $template = $template.implode("\n");
                 }
+
             },
 
             getTemplate: function getTemplate ()
