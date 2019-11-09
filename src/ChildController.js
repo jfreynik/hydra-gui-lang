@@ -19,4 +19,4 @@
 */
 
 /* global angular */
-angular.module()
+angular.module();

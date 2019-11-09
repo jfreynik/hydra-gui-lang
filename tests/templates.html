@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Template Testing</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
+        <script>angular.module("hyGui", []);</script>
+        <script src="../src/HyObject.js"></script>
+        <script src="../src/Template.js"></script>
+        <script>
+            angular.module("app", ["hyGui"]).controller("app", function (
+                hyObject,
+                hyTemplate
+            ){
+
+                var tmp = hyTemplate.new();
+
+                console.log(tmp.compile());
+
+            });
+        </script>
+    </head>
+    <body ng-app="app" ng-controller="app">
+
+        <!--
+            // Regex to capture custom html tags
+            {\(\s*([^\s]*)\s*\)}([\s\S]*){\(\/\s*\1\s*\)}
+        -->
+
+    </body>
+</html>
