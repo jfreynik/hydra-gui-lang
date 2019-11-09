@@ -12,11 +12,23 @@ angular.module("hyGui")
         },
 
         factory = {
+
+            getOpen: function _getOpen_ ()
+            {
+                return config.$open;
+            },
+
             setOpen: function _setOpen_ ($open)
             {
                 config.$open = $open;
                 return this;
             },
+
+            getClose: function _getClose_ ()
+            {
+                return config.$close;
+            },
+
             setClose: function _setClose_ ($close)
             {
                 config.$close = $close;
@@ -61,7 +73,7 @@ angular.module("hyGui")
                 }
             },
 
-            $template: hyTemplateConfig.block("base", "<p>Hello Hydra Template</p>"),
+            $template: "template: " + hyTemplateConfig.block("base", ""),
 
             // public interface
 
@@ -79,21 +91,36 @@ angular.module("hyGui")
             compile: function _compile_ ()
             {
                 var ref = this,
-                    templates = [];
+                    templates = [],
+                    open = hyTemplateConfig.getOpen(),
+                    close = hyTemplateConfig.getClose();
 
                 while (ref && ref.$template)
                 {
-                    var batch1 = ref.$template.split(hyTemplateConfig.$open),
+                    var batch1 = ref.$template.split(open),
                         batch2 = [],
-                        template = [];
+                        template = [],
+                        openTags = [],
+                        group = {},
+                        tmp;
+
                     for (var i = 0; i < batch1.length; i++)
                     {
-                        batch2 = batch1[i].split(hyTemplateConfig.$close);
-                        for (var j = 0; j < batch2.length; j++)/.
-.
+                        batch2 = batch1[i].split(close);
+                        for (var j = 0; j < batch2.length; j++) 
+                        {
+                            template.push(batch2[j]);
+                        }
                     }
 
-                    tmp.push(ref.$template);
+                    // -- need to do this ahead of time split into the different groups
+                    for (i = 0; i < template.length; i++)
+                    {
+                        tmp = template[i].trim();
+                        // if (tmp)
+                    }
+                    console.log(template);
+                    
                     ref = this.$parent;
                 }
 
