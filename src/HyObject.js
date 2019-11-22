@@ -1,122 +1,135 @@
-angular.module("hyGui").factory("hyObject", [
+angular.module("hyGui").factory("HyObject", [
 
     function HyObject ()
     {
 
         var 
-        
-        /*
-         * POJO used to make creation and extension easier
-         *
-         */
-        pojo = {
 
-            $parent: null,
+        HyObject = {
+            _chain: "HyObject",
+            _class: "HyObject",
 
-            $child: null,
-
-            $chain: "HyObject",
-
-            init: function _init_ ()
+            init: function hyObjectInit ()
             {
-
+                // empty constructor
             },
 
-            is: function _is_ ($class)
+            is: function ($class)
             {
-                return -1 < this.$chain.indexOf($class);
+                return -1 < this._chain.indexOf($class);
             },
 
-            getParent: function _getParent_ ()
+            getClass: function ()
             {
-                return this.$parent;
+                return this._class;
             },
 
-            setParent: function _setParent_ ($parent)
+            new: function ()
             {
-                this.$parent = $parent;
-                return this;
-            },
+                var obj = angular.extend({}, this);
 
-            getChild: function _getChild_ ()
-            {
-                return this.$child;
-            },
-
-            setChild: function _setChild_ ($child)
-            {
-                this.$child = $child;
-                return this;
-            },
-
-            superCall: function _superCall_ ($method, $args, $level)
-            {
-                var ref = this.$parent;
-                while (ref)
-                {
-                    if (angular.isFunction(ref[$method]))
-                    {
-                        return ref[$method].apply(this, $args);
-                    }
-                    ref = ref.$parent;
-                }
-            },
-
-            childCall: function _childCall_ ($method, $args, $level)
-            {
-
-            },
-
-            getSuperProp: function _getSuperProp_ ($prop)
-            {
-                return this.$parent[$prop];
-            },
-
-            setSuperProp: function _setSuperProp_ ($prop, $value)
-            {
-                this.$parent[$prop] = $value;
-                return this;
-            },
-
-            unsetSuperProp: function _unsetSuperProp_ ($prop)
-            {
-                delete this.$parent[$prop];
-                return this;   
-            }
-        },
-        
-        // Constructor Factory
-        Factory = {
-
-            $interface: pojo,
-
-            new: function _new_ ()
-            {
-                // create a new object from the plain old javascript object
-                var obj = angular.extend({}, this.$interface);
-                obj.init.apply(obj, arguments);
+                obj.init();
+                
                 return obj;
             },
 
-            extend: function _extend_ ($class,  $interface)
+            extend: function ($class, $interface)
             {
-                // create a new factory object
-                var factory = angular.extend({}, this),
-                    parent = angular.extend({}, factory.$interface),
-                    init = $interface.init;
+                var obj = angular.extend({}, $interface),
+                    prt = angular.extend({}, this),
+                    p = "", i = 0,
+                    prop = "",
+                    props = [],
+                    changed = false,
+                    renamed = [];
 
-                $interface = angular.extend($interface, pojo);
-                $interface.$chain = $class + ":" + parent.$chain;
+                obj._chain = $class + ":" + prt._chain;
+                obj._class = $class;
 
-                parent.$child = $interface;
-                $interface.$parent = parent;
-                $interface.init = init;
-                
-                factory.$interface = $interface;
-                return factory;
+                for (p in prt)
+                {
+                    props.push(p);
+                }
+
+                props.sort(function ($e1, $e2) {
+                    if ($e1.length !== $e2.length) {
+                        return  $e1.length - $e2.length
+                    }
+                    return $e1 < $e2;
+                });
+
+                for (i = 0; i < props.length; i++) {
+                    prop = props[i];
+                    if (!angular.isUndefined(obj[prop]))
+                    {
+                        while (!angular.isUndefined(obj[prop]))
+                        {
+                            prop = "$" + prop;
+                        }
+                        renamed.push([props[i], prop]);
+                        obj[prop] = prt[props[i]];
+                    }
+
+                    obj[prop] = prt[props[i]];
+                }
+
+                if (renamed.length) 
+                {
+                    // check if we need to update parent function references
+                    for (p in prt) 
+                    {
+                        if (angular.isFunction(prt[p]))
+                        {
+                            var src = prt[p].toString(),
+                                vrb = "";
+                            for (i = 0; i < renamed.length; i++) {
+                                if (-1 < renamed[i][0].indexOf("$") &&
+                                    -1 < src.indexOf(renamed[i][0])
+                                ) {
+                                    changed = true;
+                                    vrb = renamed[i][0].replace(/\$/g, "\\$");
+                                    src = src.replace(
+                                        new RegExp(vrb, "g"), 
+                                            "$" + renamed[i][1]);
+                                }
+                            }
+
+                            if (changed) 
+                            {
+                                // I don't like this *hack* maybe we can add
+                                // the other method of just adding $ and not
+                                // rewriting the functions
+                                prt[p] = (new Function("return " + src)());
+                                changed = false;
+                            }
+                        }
+                    }
+
+                    // loop one last time to add the adjusted functions to the object
+                    obj = angular.extend({}, $interface);
+                    obj._chain = $class + ":" + prt._chain;
+                    obj._class = $class;
+
+                    for (i = 0; i < props.length; i++) 
+                    {
+                        prop = props[i];
+                        if (!angular.isUndefined(obj[prop]))
+                        {
+                            while (!angular.isUndefined(obj[prop]))
+                            {
+                                prop = "$" + prop;
+                            }
+                        }
+                        obj[prop] = prt[props[i]];
+                    }
+
+                }
+
+                return obj;
             }
         };
 
-        return Factory;
+        return HyObject;
+
     }
 ]);

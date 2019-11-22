@@ -5,21 +5,32 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
         <script>angular.module("hyGui", []);</script>
         <script src="../src/HyObject.js"></script>
-        <script src="../src/Template.js"></script>
+        <script src="../src/HyTemplate.js"></script>
+        <script src="../src/HyComponent.js"></script>        
+        <script src="../src/components/hy-button.js"></script>
+
+        <script src="../src/Initializer.js"></script>
         <script>
             angular.module("app", ["hyGui"]).controller("app", function (
-                hyObject,
-                hyTemplate
+                
             ){
+                // console.log(HyComponent);
 
-                var tmp = hyTemplate.new();
+                
+                /* - this is what I'm trying to accomplish
+                var btn = HyButton.new({
+                    text: "hello world"
+                });
 
-                console.log(tmp.compile());
+                HyRoot.addChild(btn);
+                */ 
 
             });
         </script>
     </head>
     <body ng-app="app" ng-controller="app">
+
+        <hy-button></hy-button>
 
         <!--
             // Regex to capture custom html tags

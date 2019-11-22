@@ -22,6 +22,11 @@
                         return this;
                     },
 
+                    getLog: function _getLog_ ()
+                    {
+                        return log;
+                    },
+
                     mySqlDate: function ($date)
                     {
                         if (ng.isDate($date))
@@ -30,7 +35,17 @@
                         }
                         Util.log("Invalid date provided to Util::mySqlDate: [" + $date + "]", "warning");
                         return "";
-                    }
+                    },
+
+                    serialize: function _serialize_ ($data)
+                    {
+
+                    },
+
+                    unserialize: function _unserialize_ ($data)
+                    {
+
+                    },
                 };
 
 

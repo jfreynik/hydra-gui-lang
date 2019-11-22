@@ -1,0 +1,53 @@
+
+<!-- Button Template -->
+<button class="button" type="button" ng-click="comp.click()">
+
+</button>
+
+<!-- Close Template -->
+<div ng-class="['component', 'close', comp.class]">
+    <button class="btn btn-link" type="button" ng-click="comp.close()">
+        <i class="fa fa-times"></i>
+    </button>
+</div>
+
+<!-- Parent / Child Templates -->
+
+<!-- Root Parent Template -->
+<div ng-repeat="row in data.rows">
+    <div ng-if="row.visible !== false">
+        ((block row))((/block))
+    </div>
+</div>
+
+<!-- Child Alert Template 
+
+-->
+((block row))
+    <div ng-class="['alert', 'alert-{{row.type}}']" role="alert">
+        <hy-close ng-if="row.close" hy-attr="row.close"></hy-close>
+        <div ng-if="row.html" hy-html="row.html"></div>
+        <div ng-if="row.text">{{row.text}}</div>
+    </div>
+((/block))
+
+
+<!-- Child -->
+<% block button %>
+<% end %>
+
+
+
+<!-- Parent Template -->
+((block [name1]))
+    <p>This is parent content</p>
+    ((block [name2]))
+        inner block
+    ((/block))
+((/block))
+
+
+<!-- Child Template -->
+((block [name1]))
+    ((parent))
+((/block))
