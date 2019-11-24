@@ -99,6 +99,7 @@ angular.module("hyGui").factory("HyObject", [
                                 // I don't like this *hack* maybe we can add
                                 // the other method of just adding $ and not
                                 // rewriting the functions
+                                // (messes up functions closure)
                                 prt[p] = (new Function("return " + src)());
                                 changed = false;
                             }

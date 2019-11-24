@@ -12,11 +12,21 @@
         <script src="../src/Initializer.js"></script>
         <script>
             angular.module("app", ["hyGui"]).controller("app", function (
-                
+                $scope,
+                $timeout
             ){
                 // console.log(HyComponent);
 
-                
+                $scope.test = true;
+                $scope.text = "Click here";
+
+                function check () {
+                    console.log($scope.text);
+                    $timeout(check, 5000);
+                };
+
+                check();
+
                 /* - this is what I'm trying to accomplish
                 var btn = HyButton.new({
                     text: "hello world"
@@ -30,7 +40,7 @@
     </head>
     <body ng-app="app" ng-controller="app">
 
-        <hy-button></hy-button>
+        <hy-button text="text"></hy-button>
 
         <!--
             // Regex to capture custom html tags
